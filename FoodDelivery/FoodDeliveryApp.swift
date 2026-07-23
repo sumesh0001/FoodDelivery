@@ -6,12 +6,30 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct FoodDeliveryApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+    let modelContainer: ModelContainer
+    let diContainer: DIContainer
+    
+    init() {
+        do {
+            modelContainer = try ModelContainer(for: FavoriteRecord.self)
+        } catch {
+            fatalError("Failed to initialize SwiftData ModelContainer: \(error)")
         }
+        diContainer = DIContainer(modelContext: modelContainer.mainContext)
+    }
+    
+    var body: some Scene {
+//        WindowGroup {
+//            ContentView()
+//        }
+        
+        WindowGroup {
+            RootTabView(container: diContainer)
+        }
+        .modelContainer(modelContainer)
     }
 }
